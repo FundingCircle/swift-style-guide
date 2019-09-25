@@ -1090,11 +1090,11 @@ We write our tests using behavior-driven testing(BDD). BDD encourages writing te
 ```swift
 // PREFERRED 
 describe(applicationStatus) {
-context("when application status is accepted") {
-it("returns accepted") { /* ... */ {
+    context("when application status is accepted") {
+	it("returns accepted") { /* ... */ {
 
-context("when application status is rejected") { 
-it("returns rejected") { /* ... */ }
+    context("when application status is rejected") { 
+	it("returns rejected") { /* ... */ }
 
 // NOT PREFERRED
 describe("when application status is accepted") { /* ... */  }
@@ -1103,70 +1103,104 @@ describe("when application status is rejected") { /* ... */ }
 
 ```
 
-* **5.1.2** The results your test expects should be declared in the describe or context block to make it clear what you are testing
+* **5.1.2** It is better to split your test results into multiple it statements rather than one large it statement. This makes it easier to figure out exactly which part of your test failed
+
+```swift
+// PREFERRED
+context("given the AccountType of .isa") {
+    it("sets the title correctly") { /* ... */ }
+
+    it("sets the description correctly") { /* ... */ }
+
+// NOT PREFERRED
+    it("sets account information correctly") { 
+       expect(titleLabel.text).toEqual(title)
+       expect(descriptionLabel.text).toEqual(description)
+    }
+```
+
+* **5.1.3** The results your test expects should be declared in the describe or context block to make it clear what you are testing
 
 ```swift
 // PREFERRED
 describe("fetchData")
-let results: [String]?
+    let results: [String]?
 
-it("returns results") { /* ... */ }
+    it("returns results") { /* ... */ }
 
 // NOT PREFFERED
 describe("fetchData") { 
-it("returns results") { 
-let results: [String]?
-}
+    it("returns results") { 
+        let results: [String]?
+    }
 }
 ```
 
+* **5.1.4** In the case of writing nested unit tests, only keep the result that is required by each nested test in the top describe/context block. If a result is only required by a specific context, place it in the appropriate child context
 
-* **5.1.3** If your unit test requires some sort of setup in order to test your result, that setup should be done in the beforeEach.
+```swift
+// PREFERRED
+describe("API")
+   let url = "..."
+
+   context("given a successful response from the API") {
+        var result: Object?
+	
+	beforeEach  { /* ... */ } 
+	
+	it("returns object with array of children") { /* ... */ }
+	
+	context("and first child is returned successfully") { 
+	    let expectedName = "Child"
+		
+	    it("contains the correct values") { /* ... */ }
+	}
+		
+
+// NOT PREFFERED
+describe("API") {
+    let url = "..."
+    var result: Object?
+    let expectedName = "Child"
+
+    context("given a successful response from the API") {
+        beforeEach  { /* ... */ } 
+	
+	it("returns object with array of children") { /* ... */ }
+	
+	it("and first child is returned successfully") { /* ... */ }
+```
+
+* **5.1.5** If your unit test requires some sort of setup in order to test your result, that setup should be done in the beforeEach.
 
 ```swift
 // PREFERRED
 beforeEach {
-service.fetchUser() 
+    service.fetchUser() 
 } 
 
 it("returns user") { /* ... */ }
 
 // NOT PREFFERED
 it("returns user") {
-beforeEach {
-service.fetchUser() 
-}
+    beforeEach {
+        service.fetchUser() 
+    }
 /* ... */
 }
 ```
 
-* **5.1.4** It is better to split your test results into multiple it statements rather than one large it statement. This makes it easier to figure out exactly which part of your test failed
+* **5.1.6** When dealing with code that returns an optional value, in the it statement, use force unwrapped so test will crash. We want to know straight if there is something wrong rather than waiting for all the tests to finish.
 
 ```swift
-// PREFERRED
-context("given the AccountType of .isa") {
-it("sets the title correctly") { /* ... */ }
-
-it("sets the description correctly") { /* ... */ }
-
-// NOT PREFERRED
-it("sets account information correctly") { 
-expect(titleLabel.text).toEqual(title)
-expect(descriptionLabel.text).toEqual(description)
-}
-```
-
-* **5.1.5** When dealing with code that returns an optional value, in the it statement, use force unwrapped so test will crash. We want to know straight if there is something wrong rather than waiting for all the tests to finish.
-
-```swift
-// PREFERRED
+ // PREFERRED
 it("returns data") { 
-expect(results!.count).toEqual(2)
+   expect(results!.count).toEqual(2)
 }
 
-// NOT PREFERRED
+ // NOT PREFERRED
 it("returns data") { 
-expect(results?.count).toEqual(2)
+    expect(results?.count).toEqual(2)
 }
 ```
 
@@ -1180,14 +1214,14 @@ expect(results?.count).toEqual(2)
 describe("ExampleViewController") {
 
 context("content") {
-it("""
-shows the example view:
-______________________________________
-|                                    |
-| Title                              |
-| Description                        |
-|____________________________________|
-"""
-)
+   it("""
+   shows the example view:
+  ______________________________________
+  |                                    |
+  | Title                              |
+  | Description                        |
+  |____________________________________|
+   """
+  )
 }
 ```
