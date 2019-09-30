@@ -1077,15 +1077,16 @@ class Pirate {
 }
 ```
 
+
 ### 5. Writing Tests
 
-We write our tests using behavior-driven testing(BDD). BDD encourages writing tests in a more natural way to allow for the creation of more readable unit tests for both programmers and non programmers. Unit tests should be written as scenarios which a clear description of what that test is doing, what setup is required and what results are expected
+We write our tests using Behavior-Driven Development (BDD). See https://en.wikipedia.org/wiki/Behavior-driven_development for more information. BDD encourages writing tests in a more natural way to allow for the creation of more readable unit tests for both programmers and non programmers. Tests should be written as scenarios which a clear description of what that test is doing, what setup is required and what results are expected.
 
 
 ### 5.1 Unit Tests
 
 
-* **5.1.1** Describe blocks should be used to separate out different scenarios you are testing. If that scenario requires different configurations in order to fully test that scenario, then those configurations should be placed inside separate contexts to make your test more readable
+* **5.1.1** `describe` blocks should be used to separate out tests for a specific unit you are testing (e.g. a public method or a property behaviour). If the unit's behaviour varies depending on different scenarios, then each of those scenarios should be covered inside separate `context` blocks, describing the scenario.
 
 ```swift
 // PREFERRED 
@@ -1102,13 +1103,13 @@ describe("when application status is accepted") { /* ... */ }
 describe("when application status is rejected") { /* ... */ }
 ```
 
-* **5.1.2** You should split your test results into multiple it statements rather than having one large it statement. This makes it easier to figure out exactly which part of your test failed. 
+* **5.1.2** You should split your test results into multiple `it` statements rather than having one large `it` statement. This makes it easier to figure out exactly which part of your test failed. 
 
 ```swift 
 // PREFERRED
 it("returns user with object with array of children") { 
     expect(result!.children.count).to(equal(2))
-    result?.children.forEach {
+    result!.children.forEach {
        expect($0).toEventually(beAKindOf(Child.self))
     }
 }
@@ -1122,13 +1123,16 @@ it("first child contains correct values") {
 it("returns user with correct values") { 
     expect(result!.children).toNot(beEmpty())
     expect(result!.children).to(equal(2))
-    
+    result!.children.forEach {
+       expect($0).toEventually(beAKindOf(Child.self))
+    }
+ 
     let firstChild = result.children[0] as! Child
     expect(firstChild.name).toEventually(equal(name))
 }
 ```
 
-* **5.1.3** The results your test expects should be declared in the describe or context block to make it clear what you are testing.
+* **5.1.3** The results your test expects should be declared in the `describe` or `context` block to make it clear what you are testing.
 
 ```swift
 // PREFERRED
@@ -1146,49 +1150,31 @@ describe("fetchData") {
 ```
 
 
-* **5.1.4** If your unit test requires some sort of setup in order to test your result, that set up should never be done in the it statement. It should either be done in the beforeEach or the describe/context block. BeforeEach is preferred when you have nested describe/context blocks or multiple it statements 
+* **5.1.4** If your unit test requires some sort of setup in order to test your result, that set up should be done in the `beforeEach` rather than the `it` block. The `it` block responsibility should soley be for checking the results of your test, not doing set up as well.
 
 ```swift
 // PREFERRED
+var result: [Objects]!
+
 beforeEach {
-    viewModel.fetchArrayOfObjects()
+    result = viewModel.fetchArrayOfObjects()
 } 
 
 it("returns array of 5 objects ") { /* ... */ }
 
-it("and 5 objects have correct values") { /* ... */ } 
-
-
 // NOT PREFFERED
-it("returns user") {
-    beforeEach {
-        viewModel.fetchArrayOfObjects()
-    }
-/* ... */
+it("returns array of 5 objects") {
+    let result = viewModel.fetchArrayOfObjects()
 }
 ```
 
-If there is a single it statement for the test scenario, then you can setup the result in the describe or context block
-
-```swift
- describe("title") {
-     let result = Localizable.signUp_Application_Verifying_Title()
-
-     it("returns application verifying title") {
-         expect(viewModel.title).to(equal(result))
-     }
-}
-```
-
-* **5.1.5** In the case of writing nested unit tests, only keep the result that is required by each nested test in the top describe/context block. If a result is only required by a specific context, place it in the appropriate child context
+* **5.1.5** In the case of writing nested unit tests, only keep the result that is required by each nested test in the top `describe` or `context` block. If a result is only required by a specific context, place it in the appropriate child `context`.
 
 ```swift
 // PREFERRED
 describe("API")
-   let url = "..."
-
    context("given a successful response from the API") {
-        var result: Object?
+        var result: Object!
 	
 	beforeEach  { /* ... */ } 
 	
@@ -1197,14 +1183,16 @@ describe("API")
 	context("and first child is returned successfully") { 
 	    let expectedName = "Child"
 		
-	    it("contains the correct values") { /* ... */ }
+	    it("contains the correct values") { 
+	       let child = result!.children[0] as! Child
+	       expect(child.name).to(equal(expectedName))
+	    }
 	}
 		
 
 // NOT PREFFERED
 describe("API") {
-    let url = "..."
-    var result: Object?
+    var result: Object!
     let expectedName = "Child"
 
     context("given a successful response from the API") {
@@ -1212,10 +1200,15 @@ describe("API") {
 	
 	it("returns object with array of children") { /* ... */ }
 	
-	it("and first child is returned successfully") { /* ... */ }
+	context("and first child is returned successfully") { 
+	    it("contains the correct values") { 
+	       let child = result!.children[0] as! Child
+	       expect(child.name).to(equal(expectedName))
+	    }
+	}
 ```
 
-* **5.1.6** When dealing with code that returns an optional value, in the it statement, use force unwrapped so test will crash. We want to know straight away if there is something wrong rather than waiting for all the tests to finish.
+* **5.1.6** When dealing with code that returns an optional value, use force unwrapped so the test will crash. We want to know straight away if there is something wrong rather than waiting for all the tests to finish.
 
 ```swift
  // PREFERRED
@@ -1232,7 +1225,7 @@ it("returns data") {
 ### 5.2 UI Tests
 
 
-* **5.2.1**: When writing UI tests, you should include an example description of what the view should look like.
+* **5.2.1** When writing UI tests, you should include an example description of what the view should look like.
 
 ```swift
 describe("ExampleViewController") {
@@ -1249,3 +1242,4 @@ context("content") {
   )
 }
 ```
+
