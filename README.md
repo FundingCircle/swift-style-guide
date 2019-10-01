@@ -1103,32 +1103,30 @@ describe("when application status is accepted") { /* ... */ }
 describe("when application status is rejected") { /* ... */ }
 ```
 
-* **5.1.2** You should split your test results into multiple `it` statements rather than having one large `it` statement. This makes it easier to figure out exactly which part of your test failed. 
+* **5.1.2** As a general rule of thumb, it is better to separate your `it` blocks into one `expect` per block. This allows you to more easily figure out which part of test failed. 
 
 ```swift 
 // PREFERRED
-it("returns user with object with array of children") { 
-    expect(result!.children.count).to(equal(2))
-    result!.children.forEach {
-       expect($0).toEventually(beAKindOf(Child.self))
-    }
+beforeEach { 
+   result = viewModel.fetchResults()
 }
 
-it("first child contains correct values") {
-    let firstChild = result.children[0] as! Child
-    expect(firstChild.name).toEventually(equal(name))
+it("has count of 1") {
+    expect(result.count).to(equal(1))
 }
 
-// NOT PREFFERED
-it("returns user with correct values") { 
-    expect(result!.children).toNot(beEmpty())
-    expect(result!.children).to(equal(2))
-    result!.children.forEach {
-       expect($0).toEventually(beAKindOf(Child.self))
-    }
- 
-    let firstChild = result.children[0] as! Child
-    expect(firstChild.name).toEventually(equal(name))
+it("contains an item") {
+    expect(result[0]).to(equal("item"))
+}
+
+// NOT PREFERRED
+beforeEach { 
+   result = viewModel.fetchResults()
+}
+
+it("result is returned with correct values") {
+    expect(result[0]).to(equal("item"))
+    expect(result.count).to(equal(0))
 }
 ```
 
@@ -1137,14 +1135,14 @@ it("returns user with correct values") {
 ```swift
 // PREFERRED
 describe("fetchData")
-    let results: [String]!
+    let result: [String]!
 
     it("returns results") { /* ... */ }
 
 // NOT PREFFERED
 describe("fetchData") { 
     it("returns results") { 
-        let results: [String]?
+        let result: [String]?
     }
 }
 ```
