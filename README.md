@@ -1079,7 +1079,7 @@ class Pirate {
 
 ### 5. Writing Tests
 
-We write our tests using Behavior-Driven Development (BDD). See https://en.wikipedia.org/wiki/Behavior-driven_development for more information. BDD encourages writing tests in a more natural way to allow for the creation of more readable unit tests for both programmers and non programmers. Tests should be written as scenarios which a clear description of what that test is doing, what setup is required and what results are expected.
+We write our tests using Behavior-Driven Development (BDD). See https://en.wikipedia.org/wiki/Behavior-driven_development for more information. BDD encourages writing tests in a more natural way to allow for the creation of more readable unit tests for both programmers and non programmers. Tests should be written as scenarios with a clear description of what that test is doing, what setup is required and what results are expected.
 
 ### 5.1 Unit Tests
 
