@@ -1110,7 +1110,7 @@ describe("validation") { /* ... */
 describe("testing validation")
 ```
 
-* **5.1.3** Your descriptions should read should all be written in lower case rather than upper case.
+* **5.1.3** Your descriptions should all be written in lower case rather than upper case.
 
 ```swift
 // PREFERRED 
@@ -1123,7 +1123,7 @@ describe("Init") { /* ... */ }
 describe("INIT") { /* ... */ }
 ```
 
-* **5.1.4** Your descriptions should read as complete easy to understand sentences. This is especially important when writing nested unit tests so anyone reading your test can easily get the complete context of what you are trying to test.
+* **5.1.4** Your scenarios should read as complete and easy to understand sentences. This is especially important when writing nested unit tests so anyone reading your test can easily get the complete context of what you are trying to test.
 
 ```swift
 // PREFERRED 
@@ -1172,7 +1172,7 @@ it("result is returned with correct values") {
 
 * **5.1.6** The results your test expects should be declared in the `describe` or `context` block to make it clear what you are testing.
 
-*Note: This is a recent convention. Previously expected results were also be placed in the `it` block so many of our older tests you will notice this.
+*Note: This is a recent convention. Previously expected results were also placed in the `it` block so in many of our older tests you will notice this.
 
 ```swift
 // PREFERRED
