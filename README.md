@@ -1100,7 +1100,7 @@ describe("when application status is accepted") { /* ... */ }
 describe("when application status is rejected") { /* ... */ }
 ```
 
-* **5.1.2** Avoid using the word test in your `describe` block descriptions. It is redundant to prefix a unit test description with "test" or "testing". It should be clear from your description what function or scenario you are testing
+* **5.1.2** Avoid using the word test in your `describe` block descriptions. It is redundant to prefix a unit test description with "test" or "testing". It should be clear from your description what function or scenario you are testing.
 
 ```swift
 // PREFERRED 
@@ -1110,7 +1110,7 @@ describe("validation") { /* ... */
 describe("testing validation")
 ```
 
-* **5.1.3** Your descriptions should read should all be written in lower case rather than upper case
+* **5.1.3** Your descriptions should read should all be written in lower case rather than upper case.
 
 ```swift
 // PREFERRED 
@@ -1141,7 +1141,9 @@ describe("format") {
 }
 ```
 
-* **5.1.5** As a general rule of thumb, it is better to separate your `it` blocks into one `expect` per block. This allows you to more easily figure out which part of test failed. 
+* **5.1.5** As a general rule of thumb, it is better to separate your tests into multiple`it` blocks rather than having one large `it` block. This allows you to more easily figure out which part of test failed. 
+
+*Note: This is a recent convention. Many of our older tests have many expect statements grouped under a single `it` block.
 
 ```swift 
 // PREFERRED
@@ -1170,6 +1172,8 @@ it("result is returned with correct values") {
 
 * **5.1.6** The results your test expects should be declared in the `describe` or `context` block to make it clear what you are testing.
 
+*Note: This is a recent convention. Previously expected results were also be placed in the `it` block so many of our older tests you will notice this.
+
 ```swift
 // PREFERRED
 describe("fetchData")
@@ -1185,7 +1189,9 @@ describe("fetchData") {
 }
 ```
 
-* **5.1.7** If your unit test requires some sort of setup in order to test your result, that set up should always be done in the `beforeEach`. That setup can either be configuring the test environment if your tests require it or invoking the code required to fetch the result you wish to test. In the case of nested unit tests, the highest `beforeEach` up the hierarchy should be for the setup of the environment your tests require. Then the closest `beforeEach` to the `it` block should fetch the result you wish to test. The `it` block responsibility should soley be for checking the results of your test
+* **5.1.7** If your unit test requires some sort of setup in order to test your result, that set up should always be done in the `beforeEach`. That setup can either be configuring the test environment if your tests require it or invoking the code required to fetch the result you wish to test. In the case of nested unit tests, the highest `beforeEach` up the hierarchy should be for the setup of the environment your tests require. Then the closest `beforeEach` to the `it` block should fetch the result you wish to test. The `it` block responsibility should soley be for checking the results of your test.
+
+*Note: This is a recent convention. Previously the convention was, if there was just one `it` block, then you can do setup in there. So many older tests you will notice this convention.
 
 ```swift
 // PREFERRED
