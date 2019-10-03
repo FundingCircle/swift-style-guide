@@ -184,8 +184,8 @@ let cellWidth = collectionView.bounds.size.width +
 2. internal
 3. private
 
-and keeping the **computed properties** at the bottom of them.
-An **empty line** should always separate these groups; in addition if one of this group of properties counts **10 or more elements** or there is no clear logic order than we should keep them ordered **alphabetically** just in that group.
+   and keeping the **computed properties** at the bottom of them.
+   An **empty line** should always separate these groups; in addition if one of this group of properties counts **10 or more elements** or there is no clear logic order than we should keep them ordered **alphabetically** just in that group.
 ```swift
 // PREFERRED
 public var variable1: ...
