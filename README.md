@@ -1104,10 +1104,18 @@ describe("when application status is rejected") { /* ... */ }
 
 ```swift
 // PREFERRED 
+describe("init") { /* ... */ 
+
 describe("validation") { /* ... */ 
 
+describe("fetchUsers") { /* ... */ 
+
 // NOT PREFERRED
-describe("testing validation")
+describe("test init") { /* ... */ 
+
+describe("test validation") { /* ... */ 
+
+describe("testing fetchUsers") { /* ... */ 
 ```
 
 * **5.1.3** Your descriptions should all be written in lower case rather than upper case.
