@@ -1087,38 +1087,30 @@ We write our tests using Behavior-Driven Development (BDD). See https://en.wikip
 
 ```swift
 // PREFERRED 
-describe(applicationStatus) {
-    context("when application status is accepted") {
-	it("returns accepted") { /* ... */ {
+describe("applicationStatus") {
+    context("given application status is accepted") {
+	it("returns accepted") { /* ... */ }
 
-    context("when application status is rejected") { 
+    context("given application status is rejected") { 
 	it("returns rejected") { /* ... */ }
 
 // NOT PREFERRED
-describe("when application status is accepted") { /* ... */ }
+describe("given application status is accepted") { /* ... */ }
 
-describe("when application status is rejected") { /* ... */ }
+describe("given application status is rejected") { /* ... */ }
 ```
 
-* **5.1.2** Avoid using the word test in your `describe` block descriptions. It is redundant to prefix a unit test description with "test" or "testing". It should be clear from your description what function or scenario you are testing.
+* **5.1.2** Avoid using the word test in your `describe` block descriptions. It is redundant to prefix a unit test description with "test" or "testing". It should be clear from your description what function or scenario you are testing
 
 ```swift
 // PREFERRED 
-describe("init") { /* ... */ 
-
-describe("validation") { /* ... */ 
-
-describe("fetchUsers") { /* ... */ 
+describe("validation") { /* ... */ }
 
 // NOT PREFERRED
-describe("test init") { /* ... */ 
-
-describe("test validation") { /* ... */ 
-
-describe("testing fetchUsers") { /* ... */ 
+describe("testing validation") { /* ... */ }
 ```
 
-* **5.1.3** Your descriptions should all be written in lower case rather than upper case.
+* **5.1.3** Your descriptions should all be written in lower case rather than upper case
 
 ```swift
 // PREFERRED 
@@ -1131,13 +1123,13 @@ describe("Init") { /* ... */ }
 describe("INIT") { /* ... */ }
 ```
 
-* **5.1.4** Your scenarios should read as complete and easy to understand sentences. This is especially important when writing nested unit tests so anyone reading your test can easily get the complete context of what you are trying to test.
+* **5.1.4** Your descriptions should always read as complete easy to understand sentences. This is especially important when writing nested unit tests so anyone reading your test can easily get the complete context of what you are trying to test. 
 
 ```swift
 // PREFERRED 
 describe("format") { 
-    context("when the formatting has a maxLength of 1") {
-        context("and the passed string has a length over the maxLength") { 
+    context("given the formatting has a maxLength of 1") {
+        context("when the passed string has a length over the maxLength") { 
             it("trims the passed string to the first character") { /* ... */ }
 }
 
@@ -1149,9 +1141,19 @@ describe("format") {
 }
 ```
 
-* **5.1.5** As a general rule of thumb, it is better to separate your tests into multiple`it` blocks rather than having one large `it` block. This allows you to more easily figure out which part of test failed. 
+* **5.1.5** When using nested contexts, the sentences should follow this convention
 
-*Note: This is a recent convention. Many of our older tests have many expect statements grouped under a single `it` block.
+```swift
+// top context should always describe the state and should start with "given"
+context("given a state") { 
+    // if an action is then required, the nested context description should start with "when"
+    context("when action is performed") { 
+        // if another action is required, the next nested context description should start with "and"
+        context("and the following action occurs") { 
+            it("expects result") { /* ... */ }
+```
+
+* **5.1.6** As a general rule of thumb, it is better to separate your `it` blocks into one `expect` per block. This allows you to more easily figure out which part of test failed. 
 
 ```swift 
 // PREFERRED
@@ -1172,15 +1174,13 @@ beforeEach {
    result = viewModel.fetchResults()
 }
 
-it("result is returned with correct values") {
+it("returns result with correct values") {
     expect(result[0]).to(equal("item"))
     expect(result.count).to(equal(0))
 }
 ```
 
-* **5.1.6** The results your test expects should be declared in the `describe` or `context` block to make it clear what you are testing.
-
-*Note: This is a recent convention. Previously expected results were also placed in the `it` block so in many of our older tests you will notice this.
+* **5.1.7** The results your test expects should be declared in the `describe` or `context` block to make it clear what you are testing.
 
 ```swift
 // PREFERRED
@@ -1197,9 +1197,7 @@ describe("fetchData") {
 }
 ```
 
-* **5.1.7** If your unit test requires some sort of setup in order to test your result, that set up should always be done in the `beforeEach`. That setup can either be configuring the test environment if your tests require it or invoking the code required to fetch the result you wish to test. In the case of nested unit tests, the highest `beforeEach` up the hierarchy should be for the setup of the environment your tests require. Then the closest `beforeEach` to the `it` block should fetch the result you wish to test. The `it` block responsibility should soley be for checking the results of your test.
-
-*Note: This is a recent convention. Previously the convention was, if there was just one `it` block, then you can do setup in there. So many older tests you will notice this convention.
+* **5.1.8** If your unit test requires some sort of setup in order to test your result, that set up should always be done in the `beforeEach`. That setup can either be configuring the test environment if your tests require it or invoking the code required to fetch the result you wish to test. In the case of nested unit tests, the highest `beforeEach` up the hierarchy should be for the setup of the environment your tests require. Then the closest `beforeEach` to the `it` block should fetch the result you wish to test. The `it` block responsibility should soley be for checking the results of your test
 
 ```swift
 // PREFERRED
@@ -1223,7 +1221,7 @@ context("fetchResults") {
 }
 ```
 
-* **5.1.8** In the case of writing nested unit tests, only keep the result that is required by each nested test in the top `describe` or `context` block. If a result is only required by a specific context, place it in the appropriate child `context`.
+* **5.1.9** In the case of writing nested unit tests, only keep the result that is required by each nested test in the top `describe` or `context` block. If a result is only required by a specific context, place it in the appropriate child `context`.
 
 ```swift
 // PREFERRED
@@ -1235,7 +1233,7 @@ describe("api") {
 	
        it("returns object with array of children") { /* ... */ }
 	
-       context("and first child is returned successfully") { 
+       context("when first child is returned successfully") { 
 	   let expectedName = "Child"
 		
 	   it("contains the correct values") { 
@@ -1256,7 +1254,7 @@ describe("api") {
 	
 	it("returns object with array of children") { /* ... */ }
 	
-	context("and first child is returned successfully") { 
+	context("when first child is returned successfully") { 
 	    it("contains the correct values") { 
 	       let child = result!.children[0] as! Child
 	       expect(child.name).to(equal(expectedName))
@@ -1266,7 +1264,7 @@ describe("api") {
 }
 ```
 
-* **5.1.9** When dealing with code that returns an optional value, use force unwrapped so the test will crash. We want to know straight away if there is something wrong rather than waiting for all the tests to finish.
+* **5.1.10** When dealing with code that returns an optional value, use force unwrapped so the test will crash. We want to know straight away if there is something wrong rather than waiting for all the tests to finish.
 
 ```swift
  // PREFERRED
