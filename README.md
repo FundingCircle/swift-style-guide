@@ -979,7 +979,7 @@ If a function is more complicated than a simple O(1) operation, you should gener
 
 After writing a doc comment, you should option click the function/property/class/etc. to make sure that everything is formatted correctly.
 
-Be sure to check out the full set of features available in Swift's comment markup [described in Apple's Documentation](https://developer.apple.com/library/tvos/documentation/Xcode/Reference/xcode_markup_formatting_ref/Attention.html#//apple_ref/doc/uid/TP40016497-CH29-SW1).
+Be sure to check out the full set of features available in Swift's comment markup [described in NSHipsters Documentation](https://nshipster.com/swift-documentation/).
 
 Guidelines:
 
@@ -989,16 +989,16 @@ Guidelines:
 
 * **4.1.3** Do not prefix each additional line with a `*`.
 
-* **4.1.4** Use the new `- parameter` syntax as opposed to the old `:param:` syntax (make sure to use lower case `parameter` and not `Parameter`). Option-click on a method you wrote to make sure the quick help looks correct.
+* **4.1.4** Use the new `- Parameter` syntax as opposed to the old `:param:`. Option-click on a method you wrote to make sure the quick help looks correct.
 
 ```swift
 class Human {
     /**
      This method feeds a certain food to a person.
 
-     - parameter food: The food you want to be eaten.
-     - parameter person: The person who should eat the food.
-     - returns: True if the food was eaten by the person; false otherwise.
+     - Parameter food: The food you want to be eaten.
+     - Parameter person: The person who should eat the food.
+     - Returns: True if the food was eaten by the person; false otherwise.
     */
     func feed(_ food: Food, to person: Human) -> Bool {
         // ...
