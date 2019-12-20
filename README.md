@@ -867,6 +867,7 @@ func eatDoughnut(at index: Int) {
 guard let monkeyIsland = monkeyIsland else {
     return
 }
+
 bookVacation(on: monkeyIsland)
 bragAboutVacation(at: monkeyIsland)
 
@@ -969,6 +970,24 @@ guard let thingOne = thingOne else {
 
 // NOT PREFERRED
 guard let thingOne = thingOne else { return }
+```
+
+* **3.11.8** There should always be an empty line after every guard.
+
+```
+// PREFERRED
+guard let monkeyIsland = monkeyIsland else {
+    return
+}
+
+somethingElse()
+
+
+// NOT PREFERRED
+guard let monkeyIsland = monkeyIsland else {
+    return
+}
+somethingElse()
 ```
 
 ## 4. Documentation/Comments
